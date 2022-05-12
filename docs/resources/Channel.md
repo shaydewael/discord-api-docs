@@ -854,12 +854,12 @@ Returns the messages for a channel. If operating on a guild channel, this endpoi
 
 ###### Query String Params
 
-| Field  | Type      | Description                              | Required | Default |
-|--------|-----------|------------------------------------------|----------|---------|
-| around | snowflake | get messages around this message ID      | false    | absent  |
-| before | snowflake | get messages before this message ID      | false    | absent  |
-| after  | snowflake | get messages after this message ID       | false    | absent  |
-| limit  | integer   | max number of messages to return (1-100) | false    | 50      |
+| Field   | Type      | Description                              | Default |
+|---------|-----------|------------------------------------------|---------|
+| around? | snowflake | get messages around this message ID      | absent  |
+| before? | snowflake | get messages before this message ID      | absent  |
+| after?  | snowflake | get messages after this message ID       | absent  |
+| limit?  | integer   | max number of messages to return (1-100) | 50      |
 
 ## Get Channel Message % GET /channels/{channel.id#DOCS_RESOURCES_CHANNEL/channel-object}/messages/{message.id#DOCS_RESOURCES_CHANNEL/message-object}
 
@@ -886,24 +886,24 @@ Files must be attached using a `multipart/form-data` body as described in [Uploa
 - For the embed object, you can set every field except `type` (it will be `rich` regardless of if you try to set it), `provider`, `video`, and any `height`, `width`, or `proxy_url` values for images.
 
 > info
-> Note that when sending a message, you must provide a value for **at least one of** `content`, `embeds`, `files[n]`, or `sticker_ids`.
+> When sending a message, you must provide a value for **at least one of** `content`, `embeds`, `files[n]`, or `sticker_ids`.
 
 ###### JSON/Form Params
 
-| Field                | Type                                                                                              | Description                                                                                                                                                                 | Required                                    |
-| -------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
-| content              | string                                                                                            | the message contents (up to 2000 characters)                                                                                                                                | one of content, file, embed(s), sticker_ids |
-| tts                  | boolean                                                                                           | true if this is a TTS message                                                                                                                                               | false                                       |
-| embeds               | array of [embed](#DOCS_RESOURCES_CHANNEL/embed-object) objects                                    | embedded `rich` content (up to 6000 characters)                                                                                                                             | one of content, file, embed(s), sticker_ids |
-| embed *(deprecated)* | [embed](#DOCS_RESOURCES_CHANNEL/embed-object) object                                              | embedded `rich` content, deprecated in favor of `embeds`                                                                                                                    | one of content, file, embed(s), sticker_ids |
-| allowed_mentions     | [allowed mention object](#DOCS_RESOURCES_CHANNEL/allowed-mentions-object)                         | allowed mentions for the message                                                                                                                                            | false                                       |
-| message_reference    | [message reference](#DOCS_RESOURCES_CHANNEL/message-reference-object-message-reference-structure) | include to make your message a reply                                                                                                                                        | false                                       |
-| components           | array of [message component](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/component-object) objects      | the components to include with the message                                                                                                                                  | false                                       |
-| sticker_ids          | array of snowflakes                                                                               | IDs of up to 3 [stickers](#DOCS_RESOURCES_STICKER/sticker-object) in the server to send in the message                                                                      | one of content, file, embed(s), sticker_ids |
-| files[n] \*          | file contents                                                                                     | the contents of the file being sent                                                                                                                                         | one of content, file, embed(s), sticker_ids |
-| payload_json \*      | string                                                                                            | JSON-encoded body of non-file params                                                                                                                                        | `multipart/form-data` only                  |
-| attachments \*       | array of partial [attachment](#DOCS_RESOURCES_CHANNEL/attachment-object) objects                  | attachment objects with filename and description                                                                                                                            | false                                       |
-| flags                | integer                                                                                           | [message flags](#DOCS_RESOURCES_CHANNEL/message-object-message-flags) combined as a [bitfield](https://en.wikipedia.org/wiki/Bit_field) (only `SUPPRESS_EMBEDS` can be set) | false                                       |
+| Field                | Type                                                                                              | Description                                                                                                                                                                 |
+| -------------------- | ------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| content              | string                                                                                            | Message contents (up to 2000 characters)                                                                                                                                |
+| tts?                 | boolean                                                                                           | `true` if this is a TTS message                                                                                                                                               |
+| embeds               | array of [embed](#DOCS_RESOURCES_CHANNEL/embed-object) objects                                    | Embedded `rich` content (up to 6000 characters)                                                                                                                             |
+| embed *(deprecated)* | [embed](#DOCS_RESOURCES_CHANNEL/embed-object) object                                              | Embedded `rich` content, deprecated in favor of `embeds`                                                                                                                    |
+| allowed_mentions?    | [allowed mention object](#DOCS_RESOURCES_CHANNEL/allowed-mentions-object)                         | Allowed mentions for the message                                                                                                                                            |
+| message_reference?   | [message reference](#DOCS_RESOURCES_CHANNEL/message-reference-object-message-reference-structure) | Include to make your message a reply                                                                                                                                        |
+| components?          | array of [message component](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/component-object) objects      | Components to include with the message                                                                                                                                  |
+| sticker_ids          | array of snowflakes                                                                               | IDs of up to 3 [stickers](#DOCS_RESOURCES_STICKER/sticker-object) in the server to send in the message                                                                      |
+| files[n] \*          | file contents                                                                                     | Contents of the file being sent                                                                                                                                         |
+| payload_json? \*     | string                                                                                            | JSON-encoded body of non-file params, only for `multipart/form-data` requests                                                                                                                                         |
+| attachments? \*      | array of partial [attachment](#DOCS_RESOURCES_CHANNEL/attachment-object) objects                  | Attachment objects with filename and description                                                                                                                            |
+| flags?               | integer                                                                                           | [Message flags](#DOCS_RESOURCES_CHANNEL/message-object-message-flags) combined as a [bitfield](https://en.wikipedia.org/wiki/Bit_field) (only `SUPPRESS_EMBEDS` can be set) |
 
 \* See [Uploading Files](#DOCS_REFERENCE/uploading-files) for details.
 
@@ -950,10 +950,10 @@ The `emoji` must be [URL Encoded](https://en.wikipedia.org/wiki/Percent-encoding
 
 ###### Query String Params
 
-| Field  | Type      | Description                           | Required | Default |
-|--------|-----------|---------------------------------------|----------|---------|
-| after  | snowflake | get users after this user ID          | false    | absent  |
-| limit  | integer   | max number of users to return (1-100) | false    | 25      |
+| Field   | Type      | Description                           | Default |
+|---------|-----------|---------------------------------------|---------|
+| after?  | snowflake | get users after this user ID          | absent  |
+| limit?  | integer   | max number of users to return (1-100) | 25      |
 
 ## Delete All Reactions % DELETE /channels/{channel.id#DOCS_RESOURCES_CHANNEL/channel-object}/messages/{message.id#DOCS_RESOURCES_CHANNEL/message-object}/reactions
 
