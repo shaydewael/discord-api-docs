@@ -1,47 +1,60 @@
-# Introduction
+# Discord for Developers
 
-You’ve found the Discord Developer Documentation! These pages are dedicated to showing you all the ways that you can use Discord to make cool stuff. Whether you’re looking to create awesome bots for your community, empower your applications with our API, or hook us right into your game with Rich Presence or the GameSDK, Discord has something for you.
+Apps give you the power to customize and extend Discord for all sorts of users and servers
 
-All of our [documentation is on GitHub](https://github.com/discord/discord-api-docs) and we <3 corrections and improvements!
+<ButtonRow>
+  <Button class="primary" href="#DOCS_INTERACTIONS_APPLICATION_COMMANDS">Get Started</Button>
+  <Button href="https://github.com/discord/discord-api-docs">View Docs on Github</Button>
+</ButtonRow>
 
-## Bugs
+---
 
-If you believe you're experiencing a bug with our API or want to report incorrect documentation, open an issue on our [issue tracker](https://github.com/discord/discord-api-docs/issues).
+# Discover Features
 
-## Bots and Apps
+Some kind of content to preface things
 
-Bots and apps are the lifeblood of the Discord development community. They come in all shapes and sizes, from small hobby projects for your server with friends, to huge projects that live in hundreds of thousands of servers. We love seeing the unique, fun, and sometimes downright strange (in a good way) creations that come from our community.
+<CardRow>
+  <Card icon="slash">
+    <Title>Interact</Title>
+    Add interactivity with [application commands](#DOCS_INTERACTIONS_APPLICATION_COMMANDS) and a collection of **[message components](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS)**
+  </Card>
+  <Card icon="sparkle">
+    <Title>Customize</Title>
+    Use bots to **[send messages](#DOCS_INTERACTIONS_APPLICATION_COMMANDS)**, modify **[guilds](#DOCS_LINK)** and **[channels](#DOCS_LINK)**, and **extend [moderation features](#DOCS_LINK)**
+  </Card>
+  <Card icon="gear">
+    <Title>Integrate</Title>
+    Explore the Game SDK to add **[rich presence](#DOCS_LINK)**, support **[multiplayer lobbies](#DOCS_LINK)**, and enable **[voice chat](#DOCS_LINK)**
+  </Card>
+</CardRow>
 
-Discord offers an open API to serve requests for both bots and OAuth2 integrations. So whether you’re making your own [`/wumpus` commands](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/) or looking to [`Log In With Discord`](#DOCS_TOPICS_OAUTH2/), we’ve got you covered.
+---
 
-So go do it! Go! Go [make an app](https://discord.com/developers/applications) and create something awesome.
+# Explore Resources
 
-## Games
+Some more kind of content ayyyyyyfdsouiajfdsoia
 
-We love games, and we love helping game developers. If YOU have a game that you want to supercharge with Discord, then we have just the thing for you.
+## Community Resources
 
-#### Your Game and Discord
+**[Community-built libraries and tools](https://github.com/discord/discord-api-docs/issues)** help you simplify and speed up app development regardless of your experience level or preferred programming language.
 
-We’ve got a whole suite of tools to help bring your game to life with Discord. Need networking? Have [networking](#DOCS_GAME_SDK_NETWORKING/)! Want a friends list? Take [relationships](#DOCS_GAME_SDK_RELATIONSHIPS/) too!
+## Change Log
 
-#### Rich Presence
+Read the **[Change log](#DOCS_LINK)** to keep up with the latest API updates and new features.
 
-No matter where your game lives, it should have a first-class experience in Discord. [Rich Presence](https://discord.com/rich-presence) is the way to make that a reality! We got tired of exchanging usernames, friend codes, and lobby passwords, so we created Rich Presence, an easy-to-use, easy-to-integrate way to get people playing games together that lets you:
+## Tutorials
 
-- Display rich game data on your players’ profiles
-- Empower them to send game invites to each other
-- Ask to Join and Spectate their friends' games
-- Spend more time playing together and less time setting up
+| Tutorial                            | Description                                                             |
+| ----------------------------------- | ----------------------------------------------------------------------- |
+| [Placeholder](#DOCS_TUTORIALS_TEST) | learnin and stuff learnin and stuff learnin and stuff learnin and stuff |
+| [Placeholder](#DOCS_TUTORIALS_TEST) | another tutorial learnin and stuff learnin and stuff                    |
+| [Placeholder](#DOCS_TUTORIALS_TEST) | just testing just testing just testing                                  |
 
-It’s free, easy, and self-serve, so check out [the GameSDK Activity Manager](#DOCS_GAME_SDK_ACTIVITIES/) and get started!
+# Find Support
 
-## Still need some help?
-
-Join the [Official Discord Developers server](https://discord.gg/discord-developers) for support and discussion regarding Discord's APIs.
-
-## Go Make Cool Stuff!
-
-We love our developers, and we plan to keep making practical tools so that YOU can keep making cool stuff. Build a bot, integrate our account system, or put us right in your game; whatever you do, do it with Discord.
+- Join the [Official Discord Developers server](https://discord.gg/discord-developers) for support and discussion regarding Discord's APIs.
+- Use [Github](https://github.com/discord/discord-api-docs/issues) to open issues about API bugs, start a discussion about a feature request, or submit a pull request for the documentation
+- Explore the [Developer Help Center](https://support-dev.discord.com/hc/en-us) to find articles about common topics and questions, or to reach directly out to Discord’s developer support.
 
 We can’t wait to see what you make.
 
