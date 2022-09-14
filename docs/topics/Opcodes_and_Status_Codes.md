@@ -41,18 +41,6 @@ In order to prevent broken reconnect loops, you should consider some close codes
 | 4013 | Invalid intent(s)     | You sent an invalid intent for a [Gateway Intent](#DOCS_TOPICS_GATEWAY/gateway-intents). You may have incorrectly calculated the bitwise value.                                                                                  | false     |
 | 4014 | Disallowed intent(s)  | You sent a disallowed intent for a [Gateway Intent](#DOCS_TOPICS_GATEWAY/gateway-intents). You may have tried to specify an intent that you [have not enabled or are not approved for](#DOCS_TOPICS_GATEWAY/privileged-intents). | false     |
 
-###### Gateway Server Closing Codes
-
-Server-initated closures by the Gateway are a semi-regular event as part of disconnects, and should be properly tracked. These closing codes are handled by most Discord libraries, but can be a hassle for providing persistent client connections if left unchecked.
-Some enumerator codes may be left out due to either never sending, or considered as generally rare closes.
-
-| Code | Description           | Explanation                                                                                                                                                                                                                      | Reconnect |
-|------|-----------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
-| 1000 | Normal closure        | The server or client of the connection failed to process data, resulting in a safe close.                                                                                                                                        | true      |
-| 1006 | Abnormal closure      | A disconnect was performed without properly sending a `CLOSING` frame.                                                                                                                                                           | true      |
-| 1008 | Policy violation      | Improper data was sent as a message to a [payload](#DOCS_TOPICS_GATEWAY/sending-events) leading to an immediate disconnect. This will rarely show compared to `4002`.                                                            | true      |
-| 1011 | Internal error        | An internal error resulted, usually in parallel to a policy violation. Try reconnecting?                                                                                                                                         | true      |
-
 ## Voice
 
 Our voice gateways have their own set of opcodes and close codes.
