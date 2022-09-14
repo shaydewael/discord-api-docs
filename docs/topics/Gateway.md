@@ -207,7 +207,7 @@ Full details about the Ready event is in the [Gateway events documentation](#DOC
 
 Gateway disconnects happen for a variety of reasons, and may be initiated by Discord or by your app.
 
-In the event of Discord initiating a disconnect, you may run into generalised WebSocket closing codes. A server-initated closure will most commonly be found from [these closing codes.](#DOCS_TOPICS_OPCODES_AND_STATUS_CODES/gateway-gateway-server-closing-codes)
+In the event of Discord initiating a disconnect, you may run into generalised WebSocket closing codes. A server-initated closure will occur when the WebSocket protocol initiates a `CLOSING` frame-based action.
 
 #### Handling a Disconnect
 
