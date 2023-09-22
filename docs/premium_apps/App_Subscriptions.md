@@ -4,7 +4,7 @@
 
 Before you can add monetization to your app, you must:
 
-1. Have a verified app
+1. Have a [verified app](https://support.discord.com/hc/articles/360040720412-Bot-Verification-and-Data-Allowlisting#h_46b3869c-6d50-43fc-b07c-9ed7569a1160)
 2. Complete the [Monetization Eligibility Checklist](#DOCS_PREMIUM_APPS_OVERVIEW/eligibility-checklist)
 
 Once you've confirmed eligibility for your app and team, you will be able to set up a SKU to represent your app's premium offering.
