@@ -260,7 +260,7 @@ Details for both types of command contexts are in the sections below.
 
 The [installation context](#DOCS_RESOURCES_APPLICATION/installation-context) is where your app was installed—to a server, a user, or both. If your app supports both installation contexts, there may be cases where you want some of your app's commands to only be available for one or the other. For example, maybe your app has a `/profile` command that is only relevant when it's installed to a user.
 
-A command's supported installation context(s) can be set using the [`integration_types` field](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/application-command-object-application-command-structure) when creating or updating a command as long as any included contexts are already [supported on the application-level](#DOCS_RESOURCES_APPLICATION/setting-supported-installation-contexts).
+A command's supported installation context(s) can be set using the [`integration_types` field](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/application-command-object-application-command-structure) when creating or updating a command as long as any included contexts are already [supported on the application-level](#DOCS_RESOURCES_APPLICATION/setting-supported-installation-contexts). By default, a command's `integration_types` will be the [supported installation contexts](#DOCS_RESOURCES_APPLICATION/setting-supported-installation-contexts) for the app at the time of command creation.
 
 A command's value for `integration_types` may affect which [interaction contexts](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/interaction-contexts) a command is visible in.
 
