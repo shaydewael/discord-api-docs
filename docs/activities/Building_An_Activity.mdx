@@ -2,7 +2,7 @@
 sidebar_label: Building an Activity
 ---
 
-# Building Your First Activity
+# Building Your First Activity in Discord
 
 > preview
 > Creating Activities is currently available as a [Public Developer Preview](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview).
@@ -83,36 +83,33 @@ When you enable Activities for your app, a [default Entry Point command](#DOCS_I
 
 By default, interactions with this command will result in Discord opening your Activity for the user and posting a message in the channel where it was launched from. However, if you prefer to handle the interactions in your app, you can update the [`handler` field](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-handlers) or create your own. Additional details are in the Entry Point command [documentation](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-commands) and [development guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/setting-up-an-entry-point-command).
 
-### Fetch Your OAuth2 Credentials
+### Set your Redirect URI
 
-To use Discord-related information, such as a user's username, avatar, or guild avatar, a user must agree to grant OAuth scopes to your application. Learn more about scopes [in the OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes).
+Next, we'll set up a redirect URI, which is where a user is redirected to after authorization with your app. The Embedded App SDK handles redirecting a user back to your Activity when [authorizing](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/authorize), so the value for the redirect URI isn't important unless you want to offer authorization outside of your Activity. TODO: can tie more to oauth
 
-There are two OAuth2 identifiers your app will need to reference: [CLIENT ID](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/client-id) and [CLIENT SECRET](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/client-secret), which are located on the `Settings -> OAuth2` tab on the developer portal.
+You can learn more about the OAuth flow and redirect URIs in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2), but for now we'll just use a placeholder value (like `https://127.0.0.1`).
 
-Find these values and hold on to them for a later step.
-
-<Collapsible title="How to find your CLIENT_ID and CLIENT_SECRET" icon="view">
-
-![oauth2-details](activities/oauth2-details.png)
-
-### Client ID
-
-Also known as the Application ID. This is the public facing id linked to your application.
-
-### Client Secret
-
-This is a private identifier that your app will use to grant an OAuth2 `access_token`. It should never be stored in the client-side JavaScript code.
-</Collapsible>
-
-### You must set up a OAuth2 redirect URI in order for this example to work.
-
-The URI should point to the location where you host your app. If you don't yet have a url, you should fill in the field with a placeholder, such as https://127.0.0.1. TODO: idk something needs to be changed tho
+Click on **OAuth2** on the sidebar in your app's settings. Under **Redirects**, enter `https://127.0.0.1` as a placeholder value then click **Save Changes**.
 
 ![Configure your Activity](activities/oauth2-redirect.png)
+
+### Fetch Your OAuth2 Credentials
+
+To use information related to a user (like their username) or a server (like its avatar), your app must be granted specific OAuth **scopes**.
+
+For our sample app, we'll be requesting three scopes: `identify` to access basic information about a user, `guilds` to access information about the guilds a user is in, and `applications.commands` to install [commands](#TODO). We'll request these later on in the guide, but a full list of scopes you can request is in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes). TODO: put in collapse?
+
+When requesting scopes, you'll need your app's OAuth2 identifiers. In your app's settings click on **OAuth2** on the sidebar and copy the values:
+- **Client ID** is the public ID that Discord associates with your app, and is almost always the same as your App ID.
+- **Client Secret** is a private identifier that your app will use to grant an OAuth2 `access_token`. It should never be stored in the client-side JavaScript code.
+
+Copy and store both of these values somewhere safe so we can use them later on in our code.
 
 ---
 
 ## Step 2: Setting up project files
+
+TODO: check in—"by now you should have x, y, z"
 
 We will use git to pull down a scaffolded project to help you get started quickly.
 
