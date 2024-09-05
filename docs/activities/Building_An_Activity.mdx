@@ -7,40 +7,21 @@ sidebar_label: Building an Activity
 > preview
 > Creating Activities is currently available as a [Public Developer Preview](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview).
 
-[Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.]
+[Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.] If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of more advanced [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
 
-If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of sample apps.
+This guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
 
-### Let's Jump In!
+<Collapsible title="What we'll be building" icon="view">
 
-For your first Activity, we'll be building an app in JavaScript with the following goals:
-- [Create a new Discord App](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/step-1-creating-a-new-app)
-- [Launch your app from within a voice channel](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/step-4-running-your-app-locally-in-discord)
-- [Authorize and authenticate with the user](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/step-5-authorizing-authenticating-users)
-- [Fetch and display the name of the current voice channel](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/step-6-use-the-sdk-to-fetch-the-channel)
-- [Fetch and display the avatar of the current server](#DOCS_ACTIVITIES_BUILDING_AN_ACTIVITY/step-7-use-the-api-to-fetch-the-guild)
+In this guide, we'll be building a Discord app with a basic Activity that handles user authentication and fetches data using the API:
 
 ![Building Your First Activity Tutorial](activities/tutorial-hero.png)
 
-> info
-> This example is intended to illustrate how a basic web application works while embedded inside of Discord. For more advanced examples, please see our [Sample Projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
-
----
-
-## Prerequisites
-
-The [Embedded App SDK](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK) is intended to abstract away some of the complexities in building a Discord Activity, but developing a full-featured, multiplayer experience requires extensive experience with JavaScript and other web technologies.
-
-If you are still learning to program, there are many free education resources to take advantage of like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
-
-Concepts that are important to know before continuing:
-
-- [Asynchronous JavaScript](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function): You will be working with async JavaScript method calls to communicate with the Discord client and API
-- [React](https://react.dev/), [Vue](https://vuejs.org/), or another frontend framework for building user interfaces
+</Collapsible>
 
 <Collapsible title="Resources used in this guide" description="Overview of the tools and technologies we'll use" icon="list" open>
 - **[discord/getting-started-activity](https://github.com/discord/getting-started-activity)**, a project template to get you started
-- **[@discord/embedded-app-sdk](https://github.com/discord/embedded-app-sdk)**, the SDK for building Discord Activities
+- **[@discord/embedded-app-sdk](https://github.com/discord/embedded-app-sdk)**, the SDK used to communicate between your app and Discord when building Activities
 - **[Node.js](https://nodejs.org)**, latest version
 - **[Express](https://expressjs.com)**, a popular JavaScript web framework we'll use to create a server to handle authenticatication and serve our app
 - **[Vite](https://vite.dev/)**, a build tool for modern JavaScript projects that will make your application easier to serve
