@@ -2,14 +2,12 @@
 sidebar_label: Building an Activity
 ---
 
-# Building Your First Activity in Discord
+# Building Your First Activity
 
 > preview
 > Creating Activities is currently available as a [Public Developer Preview](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview).
 
-## Introduction
-
-Discord Activities are web applications that can run inside Discord. This allows you to build rich, multiplayer experiences inside of Discord.
+[Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.]
 
 If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of sample apps.
 
@@ -33,11 +31,7 @@ For your first Activity, we'll be building an app in JavaScript with the followi
 
 The [Embedded App SDK](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK) is intended to abstract away some of the complexities in building a Discord Activity, but developing a full-featured, multiplayer experience requires extensive experience with JavaScript and other web technologies.
 
-If you are still learning to program, there are many free education resources to take advantage of:
-- [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations)
-- [Codecademy](https://www.codecademy.com/learn/paths/web-development)
-- [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming)
-- [Discord Developers Server](https://discord.gg/discord-developers)
+If you are still learning to program, there are many free education resources to take advantage of like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
 
 Concepts that are important to know before continuing:
 
@@ -58,36 +52,57 @@ Concepts that are important to know before continuing:
 > preview
 > During the Developer Preview, it is recommended you create a new app for testing purposes. There are [limitations for Activities](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview) during this preview period.
 
-## Step 1: Creating a new app
+## Step 1: Creating an app
 
-First, create a new app in the developer portal.
+First, create a new app in the developer portal if you don't have one already:
 
-Enter a name for your app, select a team, then press **Create**.
+<Button href="https://discord.com/developers/applications?new_application=true" color="brand">Create App</Button>
 
-![Create a new app](activities/new-app.png)
+Enter a name for your app, select a development team, then press **Create**.
 
 > info
-> **Development Team Access** <br />While developing your application, it will only be launchable or joinable by your user or any member of your developer team. It often makes sense to make a [developer team](https://discord.com/developers/teams) and set the team as the application's owner, especially if you know you will collaborate with others during the development phase.
+> **Development Team Access** <br />While developing your application, it will only be launchable or joinable by your user or any member of your developer team. It often makes sense to make a [developer team](https://discord.com/developers/teams) and set the team as the application's owner, especially if you know you will collaborate with others during the development phase. TODO: remove second sent?
 
-After you create your app, you'll land on the **General Overview** page of the app's settings, where you can update basic information about your app, like its description and icon.
+After you create your app, you'll land on the **General Overview** page of the app's settings, where you can update basic information about your app like its description and icon.
 
-### Configure Your Activity
+### Choose installation contexts
 
-Navigate to `Activities -> Getting Started` in the sidebar.
+Next, we'll configure our app's supported [installation contexts](#DOCS_RESOURCES_APPLICATION/installation-context). This determines where it can be installed: to servers, to users' accounts, or to both.
 
-Review this page and press **Get Started** to enable Activities for your app.
+TODO: creating commands (/docs/interactions/application-commands#installation-context) + handling interactions.
 
-![Configure your Activity](activities/getting-started-activities.png)
 
-From the **Activities** page in your app's settings, you can customize details, settings, and assets related to your Activity. We'll come back to this page later in this guide when we are ready to set up our URL Mappings.
+<Collapsible title="What are installation contexts?" description="Overview of where apps can be installed" icon="question">
 
-#### Entry Point Command
+> info
+> Some apps may only want to support one installation context—for example, a moderation app may only support a server context. However, by default, we recommend supporting both installation contexts. For detailed information about supporting user-installed apps, you can read the [user-installable app tutorial](#DOCS_TUTORIALS_DEVELOPING_A_USER_INSTALLABLE_APP).
+
+**Installation contexts** determine where your app can be installed: to servers, to users, or both. Apps can choose which installation contexts they support within the app's settings. 
+
+- Apps installed in a **[server context](#DOCS_RESOURCES_APPLICATION/server-context)** (server-installed apps) must be authorized by a server member with the `MANAGE_GUILD` permission, and are visible to all members of the server.
+- Apps installed in a **[user context](#DOCS_RESOURCES_APPLICATION/user-context)** (user-installed apps) are visible only to the authorizing user, and therefore don't require any server-specific permissions. Apps installed to a user context are visible across all of the user's servers, DMs, and GDMs—however, they're limited to using commands.
+</Collapsible>
+
+Click on **Installation** in the left sidebar, then under **Installation Contexts** make sure both "User Install" and "Guild Install" are selected. This will make sure users can launch our app's Activity across Discord—in servers, DMs, and in Group DMs. TOOD: wording
+
+
+### Enable Activities
+
+Next, we'll need to enable Activities for your app. On the left hand sidebar under **Activities**, click **Getting Started**.
+
+Review this page and press **Enable**.
+
+After enabling Activities, you'll see the different Activity-related pages in your app's settings. Across these pages, you'll be able to update information like supported platforms, upload assets, and configure Activity-specific settings. We'll come back to this page later in this guide to set up URL mappings.
+
+TODO: screenshot
+
+#### Default Entry Point Command
 
 When you enable Activities for your app, a [default Entry Point command](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/default-entry-point-command) called "Launch" is automatically created. This [Entry Point command](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-commands) is the primary way for users to launch your Activity in Discord.
 
 By default, interactions with this command will result in Discord opening your Activity for the user and posting a message in the channel where it was launched from. However, if you prefer to handle the interactions in your app, you can update the [`handler` field](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-handlers) or create your own. Additional details are in the Entry Point command [documentation](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-commands) and [development guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/setting-up-an-entry-point-command).
 
-### Find Your OAuth2 Credentials
+### Fetch Your OAuth2 Credentials
 
 To use Discord-related information, such as a user's username, avatar, or guild avatar, a user must agree to grant OAuth scopes to your application. Learn more about scopes [in the OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes).
 
@@ -95,7 +110,7 @@ There are two OAuth2 identifiers your app will need to reference: [CLIENT ID](#D
 
 Find these values and hold on to them for a later step.
 
-<Collapsible title="How to find your CLIENT_ID and CLIENT_SECRET" icon="view" open>
+<Collapsible title="How to find your CLIENT_ID and CLIENT_SECRET" icon="view">
 
 ![oauth2-details](activities/oauth2-details.png)
 
@@ -110,7 +125,7 @@ This is a private identifier that your app will use to grant an OAuth2 `access_t
 
 ### You must set up a OAuth2 redirect URI in order for this example to work.
 
-The URI should point to the location where you host your app. If you don't yet have a url, you should fill in the field with a placeholder, such as https://127.0.0.1.
+The URI should point to the location where you host your app. If you don't yet have a url, you should fill in the field with a placeholder, such as https://127.0.0.1. TODO: idk something needs to be changed tho
 
 ![Configure your Activity](activities/oauth2-redirect.png)
 
