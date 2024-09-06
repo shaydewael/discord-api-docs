@@ -9,6 +9,9 @@ sidebar_label: Building an Activity
 
 [Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.] If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of more advanced [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
 
+
+## Introduction
+
 This guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
 
 <Collapsible title="What we'll be building" icon="view">
@@ -19,7 +22,7 @@ In this guide, we'll be building a Discord app with a basic Activity that handle
 
 </Collapsible>
 
-<Collapsible title="Resources used in this guide" description="Overview of the tools and technologies we'll use" icon="list" open>
+<Collapsible title="Resources used in this guide" icon="list" open>
 - **[discord/getting-started-activity](https://github.com/discord/getting-started-activity)**, a project template to get you started
 - **[@discord/embedded-app-sdk](https://github.com/discord/embedded-app-sdk)**, the SDK used to communicate between your app and Discord when building Activities
 - **[Node.js](https://nodejs.org)**, latest version
@@ -30,10 +33,61 @@ In this guide, we'll be building a Discord app with a basic Activity that handle
 
 ---
 
+## Step 1: Setting up the project
+
+Before creating an app, let's set up our project code from the [discord/getting-started-activity](https://github.com/discord/getting-started-activity) repository.
+
+The sample project's code uses includes a minimal frontend for our Activity and backend with vanilla JavaScript, Node.js, Express, and [Vite](https://vitejs.dev/). As you're building your own Activity, you can use whichever backend you prefer. TODO: revise
+
+Open your command line and clone the project code:
+
+```
+git clone git@github.com:discord/getting-started-activity.git
+```
+
+Then navigate to the directory:
+```
+cd getting-started-activity
+```
+
+<Collapsible title="Project structure" description="Overview of the project structure for the sample app used in this guide" icon="code">
+
+```
+├── client
+│   ├── main.js       -> your Activity frontend
+│   ├── index.html
+│   ├── package.json
+|   |── rocket.png
+│   ├── vite.config.js
+├── server
+│   ├── package.json
+│   ├── server.js     -> your Activity backend
+└── .env              -> your credentials, ids and secrets
+```
+
+</Collapsible>
+
+### Set Up Your Frontend
+
+Now that our environment variables are set up, let's spin up our frontend.
+
+
+```
+# from inside the getting-started-activity/ directory:
+
+cd client
+npm install
+npm run dev
+```
+
+If you visit http://localhost:5173/ you will see a vanilla JS frontend template running with [Vite](https://vitejs.dev/). If you look at the code from the template, you can see that it renders an image but is not calling any Discord APIs or backend services. We will come back to this later in the guide.
+
+---
+
+## Step 2: Creating an app
+
 > preview
 > During the Developer Preview, it is recommended you create a new app for testing purposes. There are [limitations for Activities](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview) during this preview period.
-
-## Step 1: Creating an app
 
 First, create a new app in the developer portal if you don't have one already:
 
@@ -99,58 +153,19 @@ To use information related to a user (like their username) or a server (like its
 
 For our sample app, we'll be requesting three scopes: `identify` to access basic information about a user, `guilds` to access information about the guilds a user is in, and `applications.commands` to install [commands](#TODO). We'll request these later on in the guide, but a full list of scopes you can request is in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes). TODO: put in collapse?
 
-When requesting scopes, you'll need your app's OAuth2 identifiers. In your app's settings click on **OAuth2** on the sidebar and copy the values:
-- **Client ID** is the public ID that Discord associates with your app, and is almost always the same as your App ID.
-- **Client Secret** is a private identifier that your app will use to grant an OAuth2 `access_token`. It should never be stored in the client-side JavaScript code.
-
-Copy and store both of these values somewhere safe so we can use them later on in our code.
-
----
-
-## Step 2: Setting up project files
-
-TODO: check in—"by now you should have x, y, z"
-
-We will use git to pull down a scaffolded project to help you get started quickly.
-
-This tutorial's template includes a minimal frontend and backend with vanilla JavaScript, Node.js, Express, and [Vite](https://vitejs.dev/).
-
-When you build your applications, you can use whatever backend language and framework you prefer, but we will focus on JavaScript for this guide.
-
-```
-git clone git@github.com:discord/getting-started-activity.git
-cd getting-started-activity
-```
-
-This git clone will pull down a template in a `getting-started-activity` directory for you to get started with.
-
-
-```
-├── client
-│   ├── main.js       -> your Activity frontend
-│   ├── index.html
-│   ├── package.json
-|   |── rocket.png
-│   ├── vite.config.js
-├── server
-│   ├── package.json
-│   ├── server.js     -> your Activity backend
-└── .env              -> your credentials, ids and secrets
-```
-
-### Set Up Your Environment Variables
-
-In the root of your project folder is an example.env file. Let's copy that example file into a new `.env` file.
+When requesting scopes, you'll need your app's OAuth2 identifiers which we'll copy into your project's environment file. In the root of your project folder, there is an `example.env` file. Copy that into a new `.env` file:
 
 ```
 cp example.env .env
 ```
 
-`getting-started-activity/.env`
-```
-VITE_DISCORD_CLIENT_ID=YOUR_OAUTH2_CLIENT_ID_HERE
-DISCORD_CLIENT_SECRET=YOUR_OAUTH2_CLIENT_SECRET_HERE
-```
+We'll need to add two values to this file. Back in your app's settings, click on **OAuth2** on the sidebar:
+1. **Client ID**: Copy the value for Client ID and add it to your `.env` file as **`VITE_DISCORD_CLIENT_ID`**. This is the public ID that Discord associates with your app, and is almost always the same as your App ID.
+2. **Client Secret**: Copy the value for Client Secret and add it to your `.env` as **`DISCORD_CLIENT_SECRET`**. This is a private, sensitive identifier that your app will use to grant an OAuth2 `access_token`, and should never be stored in the client-side code.
+
+TODO: clean up Vite explanation
+
+
 
 > info
 > **Why is there a VITE_ prefix before our Client ID?**<br />Prefixing the `DISCORD_CLIENT_ID` environment variable with `VITE_` makes it accessible to our client-side code. This security measure ensures that only the variables you intend to be accessible in the browser are available, and all other environment variables remain private. [Read more in the Vite docs](https://vitejs.dev/guide/env-and-mode)
@@ -158,28 +173,13 @@ DISCORD_CLIENT_SECRET=YOUR_OAUTH2_CLIENT_SECRET_HERE
 Any `VITE_` prefixed variables are then made available to us in our code via `import.meta.env` such as `import.meta.env.VITE_DISCORD_CLIENT_ID`.
 
 > warn
-> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` should always be considered sensitive secrets. When using other programming languages and frameworks, it is safe to have your CLIENT_ID public and available to the browser.
-
-### Set Up Your Frontend
-
-Now that our environment variables are set up, let's spin up our frontend.
-
-
-```
-# from inside the getting-started-activity/ directory:
-
-cd client
-npm install
-npm run dev
-```
-
-If you visit http://localhost:5173/ you will see a vanilla JS frontend template running with [Vite](https://vitejs.dev/). If you look at the code from the template, you can see that it renders an image but is not calling any Discord APIs or backend services. We will come back to this later in the guide.
-
----
+> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` should always be considered sensitive secrets.
 
 ## Step 3: Installing the Embedded App SDK
 
-With our frontend running, it's time to start integration with the Discord client!
+TODO: check in—"by now you should have x, y, z"
+
+TODO: explain Embedded App SDK
 
 <Collapsible title="Install the SDK to your package.json" open>
 
@@ -233,7 +233,7 @@ document.querySelector('#app').innerHTML = `
 
 ---
 
-## Step 4: Running your app locally in Discord
+## Step 4: Running your app in Discord
 
 Let's ensure everything is wired up correctly before we move on to authenticating with Discord.
 
