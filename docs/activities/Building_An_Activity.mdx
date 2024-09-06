@@ -85,6 +85,13 @@ If you visit http://localhost:5173/ you should see a vanilla JS frontend templat
 
 While it's not much at the moment, in the following steps we'll connect it to the backend services, make it runnable in Discord, and power it up by populating it with data we pull from Discord APIs.
 
+<Collapsible title="Step 1 Checkpoint" icon="list" open>
+
+Before continuing with Step 2, make sure you have the following:
+1. Understand what [Activities](#DOCS_ACTIVITES_OVERVIEW) are (TODO)
+2. Have a local version of the [sample project](https://github.com/discord/getting-started-activity) with its frontend dependencies installed.
+</Collapsible>
+
 ---
 
 ## Step 2: Creating an app
@@ -163,7 +170,7 @@ cp example.env .env
 ```
 
 > warn
-> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` should always be considered sensitive secrets.
+> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` are *highly* sensitive secrets. Never share either secrets or check them into any kind of version control.
 
 We'll need to add two values to this `.env` file for now. Back in your app's settings, click on **OAuth2** on the sidebar:
 1. **Client ID**: Copy the value for Client ID and add it to your `.env` file as **`VITE_DISCORD_CLIENT_ID`**. This is the public ID that Discord associates with your app, and is almost always the same as your App ID.
@@ -172,30 +179,40 @@ We'll need to add two values to this `.env` file for now. Back in your app's set
 > info
 > **Why is there a VITE_ prefix before our Client ID?**<br />Prefixing the `DISCORD_CLIENT_ID` environment variable with `VITE_` makes it accessible to our client-side code. This security measure ensures that only the variables you intend to be accessible in the browser are available, and all other environment variables remain private. You can read details in the [Vite documentation](https://vitejs.dev/guide/env-and-mode).
 
-## Step 3: Installing the Embedded App SDK
+TODO: new icon for this collapse, maybe collapse by default? or maybe in a callout with new style
 
-TODO: check in—"by now you should have x, y, z"
+<Collapsible title="Step 2 Checkpoint" icon="list" open>
 
-TODO: explain Embedded App SDK
+By the end of Step 2, make sure you have:
+1. A Discord app created with Activities enabled and a placeholder Redirect URI added
+2. Your Discord app's Client ID and Client Secret added to your project's `.env` file.
+</Collapsible>
 
-<Collapsible title="Install the SDK to your package.json" open>
+## Step 3: Setting Up the Embedded App SDK
 
-From inside our `getting-started-activity/client` folder, we will install the Embedded App SDK.
+With our project and Discord app set up, we're going to install and configure the [Embedded App SDK](#TODO). The Embedded App SDK handles the communication between Discord and your app, and we'll use it extensively through the rest of the guide.
+
+### Install the SDK
+
+Back in our project's `client` directory from before (`getting-started-activity/client`), install the Embedded App SDK [via NPM](https://www.npmjs.com/package/@discord/embedded-app-sdk):
 
 ```
 npm install @discord/embedded-app-sdk
 ```
-</Collapsible>
 
 This will add `@discord/embedded-app-sdk` to `getting-started-activity/client/package.json` and install the SDK in your `node_modules` folder.
 
+### Import the SDK in your Project
+
 Once installed, we need to import it into our client code and instantiate it to start the handshake between our app and the Discord client.
 
-<Collapsible title="Add the SDK to your Project" open>
+To instantiate the SDK, we will use the environment variables we set up in Step 2.
 
-To instantiate the SDK, we will use the environment variables we set up earlier. The `VITE_DISCORD_CLIENT_ID` variable is available to us through `import.meta.env`.
+We also set up our check for the [`ready` event](#TODO) with an async/await function. This allows us to output a log or take action once the initial handshake was successful.
 
-We also set up our check for the `ready` event with an async/await function. This allows us to output a log or take action once the initial handshake was successful.
+TODO: explain events/RPC maybe
+
+<Collapsible title="Add SDK initialization to frontend" description="Code for adding the Embedded App SDK" icon="code" open>
 
 Let's import and instantiate the SDK in `getting-started-activity/client/main.js`:
 ```js
@@ -223,10 +240,19 @@ document.querySelector('#app').innerHTML = `
   </div>
 `;
 ```
+
 </Collapsible>
 
 > warn
 > **Time to leave your browser behind**<br />Once you add the SDK to your app, you will **not** be able to view your app inside your web browser. In the next step, we will run your Activity inside of Discord. In the next step, we will go over how to view you app in Discord.
+
+<Collapsible title="Step 3 Checkpoint" icon="list" open>
+
+By the end of Step 3, make sure you should:
+1. Have the Embedded App SDK installed to your project
+2. Imported the SDK in your project's `client/main.js` file
+</Collapsible>
+
 
 ---
 
@@ -269,9 +295,9 @@ Let's copy that URL and take it into our next step.
 
 ### Set up your Activity URL Mapping
 
-To serve your application, you must set up a URL mapping to where your app is hosted. For this tutorial, your app is hosted locally and being served via your network tunnel.
+To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the network tunnel we started above.
 
-Click on `Activities` -> `URL Mappings` in your application settings. Enter the URL you generated from `cloudflared` in the previous step.
+In your app's settings, click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
 
 ![Configuring your URL Mapping](activities/url-mapping-tutorial.png)
 
@@ -285,7 +311,9 @@ Read more about the specific rules and details for URL mapping [here](#DOCS_ACTI
 
 One more step before we can see our work inside of Discord!
 
-If you haven't already, go to your `User Settings` -> `Advanced` and toggle on the `Developer Mode` setting. Developer Mode exposes context menu items for building apps, including giving you access to Activities that you are working on.
+In the Discord client, go to your `User Settings` -> `Advanced` and toggle on the `Developer Mode` setting. Developer Mode exposes context menu items for building apps, including giving you access to Activities that you are working on.
+
+TODO: move asset to collapsible
 
 ![Enabling Developer Mode in Settings](activities/developer-mode.gif)
 
@@ -304,11 +332,17 @@ Clicking on your app will launch your locally running app from inside Discord!
 
 We're looking pretty good so far, but we haven't wired up any Discord functionality yet. Let's do that next.
 
+<Collapsible title="Step 4 Checkpoint" icon="list" open>
+
+By the end of Step 4, make sure you should:
+1. TODO
+</Collapsible>
+
 ---
 
 ## Step 5: Authorizing & authenticating users
 
-To fully authenticate your activity with the users playing it, we must finish implementing our server-side app and get it talking to the client-side app.
+To fully authenticate your Activity with the users playing it, we must finish implementing our server-side app and get it talking to the client-side app.
 
 We will use `express` for this example, but any backend language or framework will work here.
 
@@ -488,6 +522,13 @@ Now if we relaunch our app, we'll be prompted to authorize with Discord using th
 
 > info
 > If you want to remove the authorization, you can view your application under `Authorized Apps` under your user profile. If you click the `Deauthorize` button next to your app, you can go through the OAuth2 flow when you relaunch your activity.
+
+<Collapsible title="Step 5 Checkpoint" icon="list" open>
+
+By the end of Step 5, make sure you should:
+1. TODO
+</Collapsible>
+
 
 ---
 
