@@ -9,7 +9,6 @@ sidebar_label: Building an Activity
 
 [Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.] If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of more advanced [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
 
-
 ## Introduction
 
 This guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
@@ -45,11 +44,6 @@ Open your command line and clone the project code:
 git clone git@github.com:discord/getting-started-activity.git
 ```
 
-Then navigate to the directory:
-```
-cd getting-started-activity
-```
-
 <Collapsible title="Project structure" description="Overview of the project structure for the sample app used in this guide" icon="code">
 
 ```
@@ -67,20 +61,29 @@ cd getting-started-activity
 
 </Collapsible>
 
-### Set Up Your Frontend
+### Install project dependencies
 
-Now that our environment variables are set up, let's spin up our frontend.
+Before creating our Discord app, let's quickly install your project's frontend dependencies.
 
+Navigate to your project folder's `client` directory, which is where all the sample Activity's frontend code lives:
 
 ```
-# from inside the getting-started-activity/ directory:
+cd getting-started-activity/client
+```
 
-cd client
+Then install the project's dependencies and start up the frontend for the sample Activity:
+
+```
+# install project dependencies
 npm install
+
+# start frontend
 npm run dev
 ```
 
-If you visit http://localhost:5173/ you will see a vanilla JS frontend template running with [Vite](https://vitejs.dev/). If you look at the code from the template, you can see that it renders an image but is not calling any Discord APIs or backend services. We will come back to this later in the guide.
+If you visit http://localhost:5173/ you should see a vanilla JS frontend template running with [Vite](https://vitejs.dev/).
+
+While it's not much at the moment, in the following steps we'll connect it to the backend services, make it runnable in Discord, and power it up by populating it with data we pull from Discord APIs.
 
 ---
 
@@ -89,7 +92,7 @@ If you visit http://localhost:5173/ you will see a vanilla JS frontend template 
 > preview
 > During the Developer Preview, it is recommended you create a new app for testing purposes. There are [limitations for Activities](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview) during this preview period.
 
-First, create a new app in the developer portal if you don't have one already:
+With our project set up, let's create our app and configure the Activity. Create a new app in the developer portal if you don't have one already:
 
 <Button href="https://discord.com/developers/applications?new_application=true" color="brand">Create App</Button>
 
@@ -137,9 +140,9 @@ When you enable Activities for your app, a [default Entry Point command](#DOCS_I
 
 By default, interactions with this command will result in Discord opening your Activity for the user and posting a message in the channel where it was launched from. However, if you prefer to handle the interactions in your app, you can update the [`handler` field](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-handlers) or create your own. Additional details are in the Entry Point command [documentation](#DOCS_INTERACTIONS_APPLICATION_COMMANDS/entry-point-commands) and [development guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/setting-up-an-entry-point-command).
 
-### Set your Redirect URI
+### Add a Redirect URI
 
-Next, we'll set up a redirect URI, which is where a user is redirected to after authorization with your app. The Embedded App SDK handles redirecting a user back to your Activity when [authorizing](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/authorize), so the value for the redirect URI isn't important unless you want to offer authorization outside of your Activity. TODO: can tie more to oauth
+Next, we'll add a redirect URI, which is where a user is redirected to after authorization with your app. The Embedded App SDK handles redirecting a user back to your Activity when [authorizing](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/authorize), so the value for the redirect URI isn't important right now unless you want to offer authorization outside of your Activity. TODO: can tie more to oauth
 
 You can learn more about the OAuth flow and redirect URIs in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2), but for now we'll just use a placeholder value (like `https://127.0.0.1`).
 
@@ -159,21 +162,15 @@ When requesting scopes, you'll need your app's OAuth2 identifiers which we'll co
 cp example.env .env
 ```
 
-We'll need to add two values to this file. Back in your app's settings, click on **OAuth2** on the sidebar:
+> warn
+> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` should always be considered sensitive secrets.
+
+We'll need to add two values to this `.env` file for now. Back in your app's settings, click on **OAuth2** on the sidebar:
 1. **Client ID**: Copy the value for Client ID and add it to your `.env` file as **`VITE_DISCORD_CLIENT_ID`**. This is the public ID that Discord associates with your app, and is almost always the same as your App ID.
 2. **Client Secret**: Copy the value for Client Secret and add it to your `.env` as **`DISCORD_CLIENT_SECRET`**. This is a private, sensitive identifier that your app will use to grant an OAuth2 `access_token`, and should never be stored in the client-side code.
 
-TODO: clean up Vite explanation
-
-
-
 > info
-> **Why is there a VITE_ prefix before our Client ID?**<br />Prefixing the `DISCORD_CLIENT_ID` environment variable with `VITE_` makes it accessible to our client-side code. This security measure ensures that only the variables you intend to be accessible in the browser are available, and all other environment variables remain private. [Read more in the Vite docs](https://vitejs.dev/guide/env-and-mode)
-
-Any `VITE_` prefixed variables are then made available to us in our code via `import.meta.env` such as `import.meta.env.VITE_DISCORD_CLIENT_ID`.
-
-> warn
-> **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` should always be considered sensitive secrets.
+> **Why is there a VITE_ prefix before our Client ID?**<br />Prefixing the `DISCORD_CLIENT_ID` environment variable with `VITE_` makes it accessible to our client-side code. This security measure ensures that only the variables you intend to be accessible in the browser are available, and all other environment variables remain private. You can read details in the [Vite documentation](https://vitejs.dev/guide/env-and-mode).
 
 ## Step 3: Installing the Embedded App SDK
 
