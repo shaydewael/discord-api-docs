@@ -32,13 +32,21 @@ In this guide, we'll be building a Discord app with a basic Activity that handle
 
 ---
 
+## Step 0: Enable Developer Mode
+
+TODO: maybe pull up into section above in "Before you Begin"
+
+Before we get started, you should enable Developer Mode for your Discord account if you don't already have it enabled. Developer Mode will allow you to run in-development Activities and expose resource IDs (like users, channels, and servers) in the client which can simplify testing. To enable Developer Mode:
+1. Go to your **User Settings** in your Discord client. On Desktop, you can access **User Settings** by clicking on the cogwheel icon near the bottom-left, next to your username.
+2. Click on **Advanced** tab from the left-hand sidebar and toggle on `Developer Mode`.
+
 ## Step 1: Setting up the project
 
 Before creating an app, let's set up our project code from the [discord/getting-started-activity](https://github.com/discord/getting-started-activity) repository.
 
 The sample project's code uses includes a minimal frontend for our Activity and backend with vanilla JavaScript, Node.js, Express, and [Vite](https://vitejs.dev/). As you're building your own Activity, you can use whichever backend you prefer. TODO: revise
 
-Open your command line and clone the project code:
+Open a terminal window and clone the project code:
 
 ```
 git clone git@github.com:discord/getting-started-activity.git
@@ -260,16 +268,18 @@ By the end of Step 3, make sure you should:
 
 Let's ensure everything is wired up correctly before we move on to authenticating with Discord.
 
-To run your application locally, we recommend a network tunnel, such as `cloudflared` or `ngrok.`
 
-In one terminal, let's start our client-side app:
+### Run your app
+
+Let's run the sample app. Open a terminal window and navigate to your project directory's `client` folder, then start the client-side app:
 
 ```
 cd client
 npm run dev
 ```
 
-`client terminal output`
+Your app should start and you should see output similar to the following:
+
 ```
 VITE v5.0.12  ready in 100 ms
 
@@ -278,26 +288,34 @@ VITE v5.0.12  ready in 100 ms
 ➜  press h + enter to show help
 ```
 
-Let's start our network tunnel for port 5173 in another terminal window.
+We'll use the **Local** URL as a publicly-accessible URL in the next step.
+
+### Set up a public endpoint
+
+Next, we'll need to set up public endpoint to TODO: x, y. To do that, we'll create a tunnel using a reverse proxy. While we'll be using cloudflared in this guide, you can use ngrok or another reverse proxy solution if you prefer.
+
+While your app is still running, we'll start a network tunnel that listens to the port from the last step (in this case, port `5173`).
+
+Open another terminal window and run the following:
 
 ```
 cloudflared tunnel --url http://localhost:5173
 ```
 
-When you run `cloudflared`, the tunnel will generate a public URL for you that we will use in the next step.
+When you run `cloudflared`, the tunnel will generate a public URL and you'll see output similar to the following:
 
 ```
 Your quick Tunnel has been created! Visit it at (it may take some time to be reachable):
 https://funky-jogging-bunny.trycloudflare.com
 ```
 
-Let's copy that URL and take it into our next step.
+Copy the URL from the output, as we'll need to add it to our app's settings.
 
 ### Set up your Activity URL Mapping
 
-To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the network tunnel we started above.
+To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the network tunnel we started above. TODO: move this to above maybe? idk
 
-In your app's settings, click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
+In your [app's settings](#TODO), click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
 
 ![Configuring your URL Mapping](activities/url-mapping-tutorial.png)
 
@@ -307,21 +325,12 @@ In your app's settings, click on the **URL Mappings** page under **Activities** 
 
 Read more about the specific rules and details for URL mapping [here](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/url-mapping).
 
-### Enable Developer Mode in your Client
-
-One more step before we can see our work inside of Discord!
-
-In the Discord client, go to your `User Settings` -> `Advanced` and toggle on the `Developer Mode` setting. Developer Mode exposes context menu items for building apps, including giving you access to Activities that you are working on.
-
-TODO: move asset to collapsible
-
-![Enabling Developer Mode in Settings](activities/developer-mode.gif)
 
 ### Running your Activity in Discord
 
 Now that we are pointing Discord to our locally running app, we can launch it in Discord!
 
-In a voice channel in your Discord server, click on the Activities icon (🚀) to see your Activity at the top of the Activity Shelf.
+In a voice channel in your Discord server, click on the Activities icon (🚀) to see your Activity at the top of the Activity Shelf. TODO: not voice channel
 
 Clicking on your app will launch your locally running app from inside Discord!
 
