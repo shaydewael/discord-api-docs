@@ -7,15 +7,19 @@ sidebar_label: Building an Activity
 > preview
 > Creating Activities is currently available as a [Public Developer Preview](#DOCS_ACTIVITIES_OVERVIEW/public-developer-preview).
 
-[Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. They can be opened [TODO: channel, in response to interaction, etc.] If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of more advanced [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
+[Activities](#DOCS_ACTIVITIES_OVERVIEW) are web-based games and apps that can be run within Discord. Activities are embedded in iframes within the Discord client, and can be launched from the App Launcher or when responding to interactions.
+
+If this is your first time learning about Activities, check out the [Activities Overview](#DOCS_ACTIVITIES_OVERVIEW) for more information and a collection of more advanced [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
 
 ## Introduction
 
-This guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
+In this guide, we'll be building a Discord app with a basic Activity that handles user authentication and fetches data using the API.
+
+The guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
 
 <Collapsible title="What we'll be building" icon="view">
 
-In this guide, we'll be building a Discord app with a basic Activity that handles user authentication and fetches data using the API:
+TODO: intro
 
 ![Building Your First Activity Tutorial](activities/tutorial-hero.png)
 
@@ -34,9 +38,7 @@ In this guide, we'll be building a Discord app with a basic Activity that handle
 
 ## Step 0: Enable Developer Mode
 
-TODO: maybe pull up into section above in "Before you Begin"
-
-Before we get started, you should enable Developer Mode for your Discord account if you don't already have it enabled. Developer Mode will allow you to run in-development Activities and expose resource IDs (like users, channels, and servers) in the client which can simplify testing. To enable Developer Mode:
+Before getting started, you need to enable Developer Mode for your Discord account if you don't already have it enabled. Developer Mode will allow you to run in-development Activities and expose resource IDs (like users, channels, and servers) in the client which can simplify testing. To enable Developer Mode:
 1. Go to your **User Settings** in your Discord client. On Desktop, you can access **User Settings** by clicking on the cogwheel icon near the bottom-left, next to your username.
 2. Click on **Advanced** tab from the left-hand sidebar and toggle on `Developer Mode`.
 
@@ -44,13 +46,15 @@ Before we get started, you should enable Developer Mode for your Discord account
 
 Before creating an app, let's set up our project code from the [discord/getting-started-activity](https://github.com/discord/getting-started-activity) repository.
 
-The sample project's code uses includes a minimal frontend for our Activity and backend with vanilla JavaScript, Node.js, Express, and [Vite](https://vitejs.dev/). As you're building your own Activity, you can use whichever backend you prefer. TODO: revise
-
 Open a terminal window and clone the project code:
 
 ```
 git clone git@github.com:discord/getting-started-activity.git
 ```
+
+The sample project you cloned is broken into two parts:
+- `client` is the sample Activity's frontend, built with vanilla JavaScript and integrated with [Vite](https://vitejs.dev/) to help with local development.
+- `server` is a backend using vanilla JavaScript, Node.js, and Express. However, as you're building your own Activity, you can use whichever backend you prefer.
 
 <Collapsible title="Project structure" description="Overview of the project structure for the sample app used in this guide" icon="code">
 
@@ -64,7 +68,7 @@ git clone git@github.com:discord/getting-started-activity.git
 ├── server
 │   ├── package.json
 │   ├── server.js     -> your Activity backend
-└── .env              -> your credentials, ids and secrets
+└── .env              -> your credentials, IDs and secrets
 ```
 
 </Collapsible>
@@ -114,30 +118,27 @@ With our project set up, let's create our app and configure the Activity. Create
 Enter a name for your app, select a development team, then press **Create**.
 
 > info
-> **Development Team Access** <br />While developing your application, it will only be launchable or joinable by your user or any member of your developer team. It often makes sense to make a [developer team](https://discord.com/developers/teams) and set the team as the application's owner, especially if you know you will collaborate with others during the development phase. TODO: remove second sent?
+> **Development Team Access** <br />Launching a non-distributed Activity is limited to you or members of the developer team, so if you're collaborating with others during development, create a [developer team](https://discord.com/developers/teams) and set it to the owner when you create the app.
 
 After you create your app, you'll land on the **General Overview** page of the app's settings, where you can update basic information about your app like its description and icon.
 
 ### Choose installation contexts
 
-Next, we'll configure our app's supported [installation contexts](#DOCS_RESOURCES_APPLICATION/installation-context). This determines where it can be installed: to servers, to users' accounts, or to both.
+Apps in Discord can be installed to different **[installation contexts](#DOCS_RESOURCES_APPLICATION/installation-context)**: servers, user accounts, or both.
 
-TODO: creating commands (/docs/interactions/application-commands#installation-context) + handling interactions.
+The recommended *and* default behavior for apps is supporting both installation contexts, which lets the installer to choose the context during the installation flow. However, you can change the default behavior by changing the supported installation contexts in your app's settings.
 
+<Collapsible title="Why do installation contexts matter?" description="Overview of where apps can be installed" icon="question">
 
-<Collapsible title="What are installation contexts?" description="Overview of where apps can be installed" icon="question">
-
-> info
-> Some apps may only want to support one installation context—for example, a moderation app may only support a server context. However, by default, we recommend supporting both installation contexts. For detailed information about supporting user-installed apps, you can read the [user-installable app tutorial](#DOCS_TUTORIALS_DEVELOPING_A_USER_INSTALLABLE_APP).
-
-**Installation contexts** determine where your app can be installed: to servers, to users, or both. Apps can choose which installation contexts they support within the app's settings. 
+As mentioned, installation contexts determine where your app can be installed. The installation context affect things like who can manage the installation, where the app's commands can appear, and the data returned in response to interactions.
 
 - Apps installed in a **[server context](#DOCS_RESOURCES_APPLICATION/server-context)** (server-installed apps) must be authorized by a server member with the `MANAGE_GUILD` permission, and are visible to all members of the server.
 - Apps installed in a **[user context](#DOCS_RESOURCES_APPLICATION/user-context)** (user-installed apps) are visible only to the authorizing user, and therefore don't require any server-specific permissions. Apps installed to a user context are visible across all of the user's servers, DMs, and GDMs—however, they're limited to using commands.
+
+Details about installation contexts is in the [Application documentation](#DOCS_RESOURCES_APPLICATION/installation-context) and the [Developing a User-Installable App tutorial](#DOCS_TUTORIALS_DEVELOPING_A_USER_INSTALLABLE_APP).
 </Collapsible>
 
-Click on **Installation** in the left sidebar, then under **Installation Contexts** make sure both "User Install" and "Guild Install" are selected. This will make sure users can launch our app's Activity across Discord—in servers, DMs, and in Group DMs. TOOD: wording
-
+Click on **Installation** in the left sidebar, then under **Installation Contexts** make sure both "User Install" and "Guild Install" are selected. This will make sure users can launch our app's Activity across Discord servers, DMs, and Group DMs.
 
 ### Enable Activities
 
@@ -157,21 +158,23 @@ By default, interactions with this command will result in Discord opening your A
 
 ### Add a Redirect URI
 
-Next, we'll add a redirect URI, which is where a user is redirected to after authorization with your app. The Embedded App SDK handles redirecting a user back to your Activity when [authorizing](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/authorize), so the value for the redirect URI isn't important right now unless you want to offer authorization outside of your Activity. TODO: can tie more to oauth
+Next, we'll add a Redirect URI, which is where a user is typically redirected to after authorizing with your app when going through the standard OAuth flow. While setting up a Redirect URI is required, the Embedded App SDK automatically handles redirecting users back to your Activity when the RPC [`authorize` command](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/authorize) is called.
 
-You can learn more about the OAuth flow and redirect URIs in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2), but for now we'll just use a placeholder value (like `https://127.0.0.1`).
+You can learn more about the OAuth flow and redirect URIs in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2), but since we're only authorizing in an Activity, we'll just use a placeholder value (`https://127.0.0.1`) and let the Embedded App SDK handle the rest.
 
 Click on **OAuth2** on the sidebar in your app's settings. Under **Redirects**, enter `https://127.0.0.1` as a placeholder value then click **Save Changes**.
 
-![Configure your Activity](activities/oauth2-redirect.png)
+TODO: new screenshot
 
 ### Fetch Your OAuth2 Credentials
 
-To use information related to a user (like their username) or a server (like its avatar), your app must be granted specific OAuth **scopes**.
+To use information related to a user (like their username) or a server (like the server's avatar), your app must be granted specific OAuth **scopes**.
 
-For our sample app, we'll be requesting three scopes: `identify` to access basic information about a user, `guilds` to access information about the guilds a user is in, and `applications.commands` to install [commands](#TODO). We'll request these later on in the guide, but a full list of scopes you can request is in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes). TODO: put in collapse?
+For our sample app, we'll be requesting three scopes: `identify` to access basic information about a user, `guilds` to access basic information about the servers a user is in, and `applications.commands` to install [commands](#DOCS_INTERACTIONS_OVERVIEW/commands). We'll request these later on in the guide, but a full list of scopes you can request is in the [OAuth2 documentation](#DOCS_TOPICS_OAUTH2/shared-resources-oauth2-scopes).
 
-When requesting scopes, you'll need your app's OAuth2 identifiers which we'll copy into your project's environment file. In the root of your project folder, there is an `example.env` file. Copy that into a new `.env` file:
+When requesting scopes later on, you'll need to pass your app's OAuth2 identifiers. For now, we'll copy these identifiers into your project's environment file.
+
+In the root of your project, there is an `example.env` file. From the root of your project, run the following to copy it into a new `.env` file:
 
 ```
 cp example.env .env
@@ -180,14 +183,12 @@ cp example.env .env
 > warn
 > **Secure Your Secrets**<br /> Your `DISCORD_CLIENT_SECRET` and `DISCORD_BOT_TOKEN` are *highly* sensitive secrets. Never share either secrets or check them into any kind of version control.
 
-We'll need to add two values to this `.env` file for now. Back in your app's settings, click on **OAuth2** on the sidebar:
+Back in your app's settings, click on **OAuth2** on the sidebar:
 1. **Client ID**: Copy the value for Client ID and add it to your `.env` file as **`VITE_DISCORD_CLIENT_ID`**. This is the public ID that Discord associates with your app, and is almost always the same as your App ID.
-2. **Client Secret**: Copy the value for Client Secret and add it to your `.env` as **`DISCORD_CLIENT_SECRET`**. This is a private, sensitive identifier that your app will use to grant an OAuth2 `access_token`, and should never be stored in the client-side code.
+2. **Client Secret**: Copy the value for Client Secret and add it to your `.env` as **`DISCORD_CLIENT_SECRET`**. This is a private, sensitive identifier that your app will use to grant an OAuth2 `access_token`, and should never be shared or checked into version control.
 
 > info
 > **Why is there a VITE_ prefix before our Client ID?**<br />Prefixing the `DISCORD_CLIENT_ID` environment variable with `VITE_` makes it accessible to our client-side code. This security measure ensures that only the variables you intend to be accessible in the browser are available, and all other environment variables remain private. You can read details in the [Vite documentation](https://vitejs.dev/guide/env-and-mode).
-
-TODO: new icon for this collapse, maybe collapse by default? or maybe in a callout with new style
 
 <Collapsible title="Step 2 Checkpoint" icon="list" open>
 
@@ -198,7 +199,12 @@ By the end of Step 2, make sure you have:
 
 ## Step 3: Setting Up the Embedded App SDK
 
-With our project and Discord app set up, we're going to install and configure the [Embedded App SDK](#TODO). The Embedded App SDK handles the communication between Discord and your app, and we'll use it extensively through the rest of the guide.
+With our project and app set up, we're going to install and configure the [Embedded App SDK](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK) which we'll use extensively through the rest of this guide.
+
+The Embedded App SDK is a first-party SDK that handles the communication between Discord and your Activity with [commands](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/sdk-commands) to interact with the Discord client (like fetching information about the channel) and [events](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/sdk-events) to listen for user actions and changes in state (like when a user starts or stops speaking).
+
+> info
+> The events and commands available in the Embedded App SDK are a subset of the [RPC API](#DOCS_TOPICS_RPC) ones, so referencing the RPC documentation can be helpful to understand what's happening under the hood when developing Activities.
 
 ### Install the SDK
 
@@ -216,9 +222,7 @@ Once installed, we need to import it into our client code and instantiate it to 
 
 To instantiate the SDK, we will use the environment variables we set up in Step 2.
 
-We also set up our check for the [`ready` event](#TODO) with an async/await function. This allows us to output a log or take action once the initial handshake was successful.
-
-TODO: explain events/RPC maybe
+We also set up a check for the [`ready` event](#DOCS_DEVELOPER_TOOLS_EMBEDDED_APP_SDK/ready) with an async/await function which allows us to output a log or perform other actions once the handshake was successful.
 
 <Collapsible title="Add SDK initialization to frontend" description="Code for adding the Embedded App SDK" icon="code" open>
 
@@ -266,8 +270,7 @@ By the end of Step 3, make sure you should:
 
 ## Step 4: Running your app in Discord
 
-Let's ensure everything is wired up correctly before we move on to authenticating with Discord.
-
+Let's ensure everything is wired up correctly before we move on to authenticating with Discord. TODO: revise
 
 ### Run your app
 
@@ -288,15 +291,13 @@ VITE v5.0.12  ready in 100 ms
 ➜  press h + enter to show help
 ```
 
-We'll use the **Local** URL as a publicly-accessible URL in the next step.
+We'll use the Local URL as our publicly-accessible URL in the next step.
 
 ### Set up a public endpoint
 
-Next, we'll need to set up public endpoint to TODO: x, y. To do that, we'll create a tunnel using a reverse proxy. While we'll be using cloudflared in this guide, you can use ngrok or another reverse proxy solution if you prefer.
+Next, we'll need to set up the public endpoint that serves the Activity's frontend. To do that, we'll create a tunnel using a reverse proxy. While we'll be using cloudflared in this guide, you can use ngrok or another reverse proxy solution if you prefer.
 
-While your app is still running, we'll start a network tunnel that listens to the port from the last step (in this case, port `5173`).
-
-Open another terminal window and run the following:
+While your app is still running, open another terminal window and start a network tunnel that listens to the port from the last step (in this case, port `5173`):
 
 ```
 cloudflared tunnel --url http://localhost:5173
@@ -313,9 +314,9 @@ Copy the URL from the output, as we'll need to add it to our app's settings.
 
 ### Set up your Activity URL Mapping
 
-To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the network tunnel we started above. TODO: move this to above maybe? idk
+To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the public endpoint we just set up.
 
-In your [app's settings](#TODO), click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
+Back in your app's settings, click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
 
 ![Configuring your URL Mapping](activities/url-mapping-tutorial.png)
 
@@ -330,7 +331,7 @@ Read more about the specific rules and details for URL mapping [here](#DOCS_ACTI
 
 Now that we are pointing Discord to our locally running app, we can launch it in Discord!
 
-In a voice channel in your Discord server, click on the Activities icon (🚀) to see your Activity at the top of the Activity Shelf. TODO: not voice channel
+Navigate to your Discord test server and, in any voice and or text channel, open the App Launcher where your in-development Activity should be present. If you don't see your Activity, you should try searching for its name.
 
 Clicking on your app will launch your locally running app from inside Discord!
 
