@@ -314,7 +314,7 @@ Copy the URL from the output, as we'll need to add it to our app's settings.
 
 ### Set up your Activity URL Mapping
 
-To serve your application, you need to add a public URL mapping to where your app is hosted. TODO: why? this lets you do x, y. Since we're developing locally, we'll use the public endpoint we just set up.
+Because Activities are in a sandbox enviornment and go through the Discord proxy, you'll need to add a public URL mapping to serve your application and make external requests in your Activity. Since we're developing locally, we'll use the public endpoint we just set up.
 
 Back in your app's settings, click on the **URL Mappings** page under **Activities** on the left-hand sidebar. Enter the URL you generated from `cloudflared` in the previous step.
 
@@ -324,8 +324,7 @@ Back in your app's settings, click on the **URL Mappings** page under **Activiti
 |--------|-----------------------------------------|
 | `/`    | `funky-jogging-bunny.trycloudflare.com` |
 
-Read more about the specific rules and details for URL mapping [in the URL Mapping guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/url-mapping).
-
+Read details about URL Mapping [in the development guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/url-mapping).
 
 ### Running your Activity in Discord
 
@@ -546,7 +545,6 @@ By the end of Step 5, make sure you should:
 1. TODO
 </Collapsible>
 
-
 ---
 
 ## Step 6: Use the SDK to fetch the channel
@@ -604,7 +602,6 @@ If you close and rejoin the Activity, you should now see the name of the current
 By the end of Step 6, make sure you should:
 1. TODO
 </Collapsible>
-
 
 ---
 
