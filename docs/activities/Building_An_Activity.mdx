@@ -42,7 +42,7 @@ Before getting started, you need to enable Developer Mode for your Discord accou
 
 ## Step 1: Setting up the project
 
-Before creating an app, let's set up our project code from the [discord/getting-started-activity](https://github.com/discord/getting-started-activity) repository.
+Before creating an app, let's set up our project code from the [`discord/getting-started-activity`](https://github.com/discord/getting-started-activity) repository.
 
 Open a terminal window and clone the project code:
 
@@ -97,10 +97,11 @@ While it's not much at the moment, in the following steps we'll connect it to th
 
 <Collapsible title="Step 1 Checkpoint" icon="list" open>
 
-Before continuing with Step 2, make sure you have the following:
-1. Understand what [Activities](#DOCS_ACTIVITES_OVERVIEW) are (TODO)
-2. Have developer mode enabled
-3. Have a local version of the [sample project](https://github.com/discord/getting-started-activity) with its frontend dependencies installed.
+By the end of Step 1, you should have:
+- An understanding of what Discord [Activities](#DOCS_ACTIVITES_OVERVIEW) are
+- Developer Mode enabled on your Discord account
+- Cloned the [sample project](https://github.com/discord/getting-started-activity) to your development environment
+- Installed the front-end dependencies (in the `client` folder)
 </Collapsible>
 
 ---
@@ -192,8 +193,9 @@ Back in your app's settings, click on **OAuth2** on the sidebar:
 <Collapsible title="Step 2 Checkpoint" icon="list" open>
 
 By the end of Step 2, make sure you have:
-1. A Discord app created with Activities enabled and a placeholder Redirect URI added
-2. Your Discord app's Client ID and Client Secret added to your project's `.env` file.
+- Created a Discord app with Activities enabled
+- Set up a placeholder Redirect URI
+- Added your app's Client ID and Client Secret to your project's `.env` file.
 </Collapsible>
 
 ## Step 3: Setting Up the Embedded App SDK
@@ -260,9 +262,9 @@ document.querySelector('#app').innerHTML = `
 
 <Collapsible title="Step 3 Checkpoint" icon="list" open>
 
-By the end of Step 3, make sure you should:
-1. Have the Embedded App SDK installed to your project
-2. Imported the SDK in your project's `client/main.js` file
+By the end of Step 3, make sure you have:
+- Installed the Embedded App SDK to your project
+- Imported the SDK in your project's `client/main.js` file
 </Collapsible>
 
 
@@ -343,9 +345,10 @@ We're looking pretty good so far, but we haven't wired up any Discord functional
 
 <Collapsible title="Step 4 Checkpoint" icon="list" open>
 
-By the end of Step 4, make sure you should:
-1. Have Activity URL Mapping set up for your Activity
-2. Can start Activity in Discord
+By the end of Step 4, make sure you have:
+- Set up a public endpoint
+- Added an Activity URL Mapping in your app's settings
+- Successfully launched your Activity in Discord
 </Collapsible>
 
 ---
@@ -541,8 +544,9 @@ Now if we relaunch our app, we'll be prompted to authorize with Discord using th
 
 <Collapsible title="Step 5 Checkpoint" icon="list" open>
 
-By the end of Step 5, make sure you should:
-1. TODO
+By the end of Step 5, make sure you have:
+- Updated your `client/main.js` to call the backend to support user authorization and authentication
+- Been able to successfully complete the authorization flow for your app when opening your Activity
 </Collapsible>
 
 ---
@@ -599,8 +603,9 @@ If you close and rejoin the Activity, you should now see the name of the current
 
 <Collapsible title="Step 6 Checkpoint" icon="list" open>
 
-By the end of Step 6, make sure you should:
-1. TODO
+By the end of Step 6, make sure you have:
+- Updated your `client/main.js` code to fetch the channel name using the SDK
+- Added a call to the new function in the callback for `setupDiscordSdk()`
 </Collapsible>
 
 ---
@@ -669,6 +674,13 @@ If we relaunch our Activity, we will see the current server's avatar render in o
 
 ![Discord Activities](activities/tutorial-hero.png)
 
+<Collapsible title="Step 7 Checkpoint" icon="list" open>
+
+At this point, you should have your Activity up and running. For Step 7, you should have:
+- Updated your `client/main.js` code to fetch the guild information using the [`GET /users/@me/guilds`](#DOCS_RESOURCES_USER/get-current-user-guilds) API endpoint
+- Added a call to the new function in the callback for `setupDiscordSdk()`
+</Collapsible>
+
 ---
 
 ## Next Steps
@@ -678,14 +690,11 @@ Congrats on building your first Activity! 🎉
 This is an intentionally simple example to get you started with the communication between your Activity and Discord using the Embedded App SDK and APIs. From here, you can explore the [Activities documentation](#DOCS_ACTIVITIES_OVERVIEW) and other resources. 
 
 <Container>
-  <Card title="Overview of Apps" link="#DOCS_QUICK_START_OVERVIEW_OF_APPS" icon="AppsIcon">
-    Explore the platform features and APIs you have access to when building an app on Discord
-  </Card>
-  <Card title="Sample Activity Projects" link="https://discord.gg/discord-developers" icon="GlobeEarthIcon">
-     Try out the full range of Embedded App SDK features in the playground app, or explore some of the other examples
-  </Card>
   <Card title="Development Guides" link="#DOCS_DEVELOPER_TOOLS_COMMUNITY_RESOURCES" icon="WrenchIcon">
     Follow our Activities Development Guides for suggested development practices and considerations.
+  </Card>
+  <Card title="Sample Activity Projects" link="https://github.com/discord/embedded-app-sdk-examples" icon="GithubNeutralIcon">
+     Try out the full range of Embedded App SDK features in the playground app, or explore some of the other examples
   </Card>
   <Card title="Discord Developers" link="https://discord.gg/discord-developers" icon="GlobeEarthIcon">
     Join our community to ask questions about the API, attend events hosted by the Discord platform team, and interact with other Activities developers
