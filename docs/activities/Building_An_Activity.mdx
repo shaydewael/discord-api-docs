@@ -15,11 +15,9 @@ If this is your first time learning about Activities, check out the [Activities 
 
 In this guide, we'll be building a Discord app with a basic Activity that handles user authentication and fetches data using the API.
 
-The guide assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
+It assumes an understanding of [JavaScript](https://developer.mozilla.org/en-US/docs/Learn/Getting_started_with_the_web/JavaScript_basics) and [async functions](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function), and a basic understanding of frontend frameworks like [React](https://react.dev/) and [Vue](https://vuejs.org/). If you are still learning to program, there are many free education resources to explore like [The Odin Project](https://www.theodinproject.com/paths/foundations/courses/foundations), [Codecademy](https://www.codecademy.com/learn/paths/web-development), and [Khan Academy](https://www.khanacademy.org/computing/computer-programming/programming).
 
 <Collapsible title="What we'll be building" icon="view">
-
-TODO: intro
 
 ![Building Your First Activity Tutorial](activities/tutorial-hero.png)
 
@@ -101,7 +99,8 @@ While it's not much at the moment, in the following steps we'll connect it to th
 
 Before continuing with Step 2, make sure you have the following:
 1. Understand what [Activities](#DOCS_ACTIVITES_OVERVIEW) are (TODO)
-2. Have a local version of the [sample project](https://github.com/discord/getting-started-activity) with its frontend dependencies installed.
+2. Have developer mode enabled
+3. Have a local version of the [sample project](https://github.com/discord/getting-started-activity) with its frontend dependencies installed.
 </Collapsible>
 
 ---
@@ -226,7 +225,8 @@ We also set up a check for the [`ready` event](#DOCS_DEVELOPER_TOOLS_EMBEDDED_AP
 
 <Collapsible title="Add SDK initialization to frontend" description="Code for adding the Embedded App SDK" icon="code" open>
 
-Let's import and instantiate the SDK in `getting-started-activity/client/main.js`:
+In `getting-started-activity/client/main.js`, let's import and instantiate the SDK:
+
 ```js
 // Import the SDK
 import { DiscordSDK } from "@discord/embedded-app-sdk";
@@ -270,11 +270,11 @@ By the end of Step 3, make sure you should:
 
 ## Step 4: Running your app in Discord
 
-Let's ensure everything is wired up correctly before we move on to authenticating with Discord. TODO: revise
+Let's ensure everything is wired up correctly, then run the Activity in Discord.
 
 ### Run your app
 
-Let's run the sample app. Open a terminal window and navigate to your project directory's `client` folder, then start the client-side app:
+First, we'll restart the sample app. Open a terminal window and navigate to your project directory's `client` folder, then start the client-side app:
 
 ```
 cd client
@@ -295,7 +295,7 @@ We'll use the Local URL as our publicly-accessible URL in the next step.
 
 ### Set up a public endpoint
 
-Next, we'll need to set up the public endpoint that serves the Activity's frontend. To do that, we'll create a tunnel using a reverse proxy. While we'll be using cloudflared in this guide, you can use ngrok or another reverse proxy solution if you prefer.
+Next, we'll need to set up the public endpoint that serves the Activity's frontend. To do that, we'll create a tunnel with a reverse proxy. While we'll be using [`cloudflared`](https://developers.cloudflare.com/cloudflare-one/connections/connect-networks/) in this guide, you can use [ngrok](https://ngrok.com/docs) or another reverse proxy solution if you prefer.
 
 While your app is still running, open another terminal window and start a network tunnel that listens to the port from the last step (in this case, port `5173`):
 
@@ -324,12 +324,12 @@ Back in your app's settings, click on the **URL Mappings** page under **Activiti
 |--------|-----------------------------------------|
 | `/`    | `funky-jogging-bunny.trycloudflare.com` |
 
-Read more about the specific rules and details for URL mapping [here](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/url-mapping).
+Read more about the specific rules and details for URL mapping [in the URL Mapping guide](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/url-mapping).
 
 
 ### Running your Activity in Discord
 
-Now that we are pointing Discord to our locally running app, we can launch it in Discord!
+Now that we are pointing Discord to our locally running app, we can launch the Activity in Discord!
 
 Navigate to your Discord test server and, in any voice and or text channel, open the App Launcher where your in-development Activity should be present. If you don't see your Activity, you should try searching for its name.
 
@@ -345,14 +345,15 @@ We're looking pretty good so far, but we haven't wired up any Discord functional
 <Collapsible title="Step 4 Checkpoint" icon="list" open>
 
 By the end of Step 4, make sure you should:
-1. TODO
+1. Have Activity URL Mapping set up for your Activity
+2. Can start Activity in Discord
 </Collapsible>
 
 ---
 
 ## Step 5: Authorizing & authenticating users
 
-To fully authenticate your Activity with the users playing it, we must finish implementing our server-side app and get it talking to the client-side app.
+To authenticate your Activity with the users playing it, we must finish implementing our server-side app and get it talking to the client-side app.
 
 We will use `express` for this example, but any backend language or framework will work here.
 
@@ -377,9 +378,12 @@ cd server
 npm install
 ```
 
-We aren't going to edit the server code here, but it consists of a single POST route for `/api/token` that allows us to perform the Oauth2 flow from the server securely.
+We aren't going to edit the server code here, but it consists of a single POST route for `/api/token` that allows us to perform the OAuth2 flow from the server securely.
 
 <Collapsible title="getting-started-activity/server/server.js" icon="view">
+
+In the `getting-started-activity/server/server.js` file, the following code should already be present:
+
 ```javascript
 import express from "express";
 import dotenv from "dotenv";
@@ -421,11 +425,14 @@ app.listen(port, () => {
 ```
 </Collapsible>
 
+Now, start the project's backend server:
+
 ```
 npm run dev
 ```
 
-`server terminal output`
+You should output similar to the following:
+
 ```
 > server@1.0.0 dev
 > node server.js
@@ -433,14 +440,14 @@ npm run dev
 Server listening at http://localhost:3001
 ```
 
-We can now run our server and client-side apps in separate terminal windows. You can see other ways to set this up in our [Sample Projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
+We can now run our server and client-side apps in separate terminal windows. You can see other ways to set this up in the other [sample projects](#DOCS_ACTIVITIES_OVERVIEW/sample-projects).
 
 ### Calling external resources from your activity
 
-Before we call your backend activity server, we need to be aware of the Discord proxy and understand how to avoid Content Security Policy (CSP) issues.
+Before we call your backend activity server, we need to be aware of the Discord proxy and understand how to avoid any Content Security Policy (CSP) issues.
 
 > info
-> For this tutorial, we are going to simply prefix the API call to `/api/token/` with `/.proxy`, but you can also use the SDK's `patchUrlMappings()` method to automatically prefix calls to your external resources for the proxy.
+> For this tutorial, we are going to prefix the API call to `/api/token/` with `/.proxy`, but you can also use the SDK's `patchUrlMappings()` method to automatically prefix calls to your external resources for the proxy.
 
 Learn more about this topic in the guides for [Constructing a Full URL](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/construct-a-full-url) and [Using External Resources](#DOCS_ACTIVITIES_DEVELOPMENT_GUIDES/using-external-resources).
 
@@ -452,7 +459,9 @@ We're almost there! Now, we need our client application to communicate with our 
 > **What is vite.config.js?**<br />
 > To allow our frontend app to call our Express server, Vite requires us to set up a proxy for `/api/*` to our backend server, which is running on port 3001. In their docs, you can learn more about [Vite](https://vitejs.dev/).
 
-`getting-started-activity/client/main.js`
+<Collapsible title="Calling the backend server" description="Code for authorizing and authenticating" icon="code" open>
+
+Copy the following code in your project's `getting-started-activity/client/main.js` file:
 
 ```javascript
 import { DiscordSDK } from "@discord/embedded-app-sdk";
@@ -521,6 +530,7 @@ document.querySelector('#app').innerHTML = `
   </div>
 `;
 ```
+</Collapsible>
 
 Now if we relaunch our app, we'll be prompted to authorize with Discord using the `identify`, `guilds`, and `applications.commands` scopes.
 
@@ -529,9 +539,6 @@ Now if we relaunch our app, we'll be prompted to authorize with Discord using th
 > warn
 > **Safe storage of tokens**<br />
 > Access tokens and refresh tokens are powerful, and should be treated similarly to passwords or other highly-sensitive data. Store both types of tokens securely and in an encrypted manner.
-
-> info
-> If you want to remove the authorization, you can view your application under `Authorized Apps` under your user profile. If you click the `Deauthorize` button next to your app, you can go through the OAuth2 flow when you relaunch your activity.
 
 <Collapsible title="Step 5 Checkpoint" icon="list" open>
 
@@ -546,9 +553,11 @@ By the end of Step 5, make sure you should:
 
 Now that we have authenticated our users, we can start interacting with contextual Discord information that we can use in our application.
 
-Let's use the SDK to get details about the voice channel that our activity is running in. We can do this by writing a new async function that uses the `commands.getChannel` SDK method.
+Let's use the SDK to get details about the channel that our activity is running in. We can do this by writing a new async function that uses the `commands.getChannel` SDK method.
 
-`getting-started-activity/client/main.js`
+<Collapsible title="Fetching a channel using the SDK" icon="code" open>
+
+In the same `getting-started-activity/client/main.js` file, paste the following function:
 
 ```javascript
 async function appendVoiceChannelName() {
@@ -574,7 +583,7 @@ async function appendVoiceChannelName() {
 }
 ```
 
-Now, let's update the callback after `setupDiscordSdk()` to call our new function. If we close and rejoin our activity in Discord, we should now see the name of the current channel in our app!
+Now, update the callback after `setupDiscordSdk()` to call the function you just added:
 
 ```javascript
 setupDiscordSdk().then(() => {
@@ -584,9 +593,18 @@ setupDiscordSdk().then(() => {
 });
 ```
 
-Now when we launch our Activity, we will dynamically see the name of our voice channel populate in our app.
+</Collapsible>
+
+If you close and rejoin the Activity, you should now see the name of the current channel.
 
 ![Discord Activities](activities/tutorial-channel-name.png)
+
+<Collapsible title="Step 6 Checkpoint" icon="list" open>
+
+By the end of Step 6, make sure you should:
+1. TODO
+</Collapsible>
+
 
 ---
 
@@ -594,14 +612,17 @@ Now when we launch our Activity, we will dynamically see the name of our voice c
 
 Since we requested the `identify` and `guilds` scopes, you can also use the authorized `access_token` we received earlier to fetch those resources via the API.
 
-- In the following code block, we will use the `/users/@me/guilds` endpoint in combination with `auth.access_token` to get a list of the guilds we are in.
-- We will then iterate over each guild to find the guild we are in based on the `guildId` defined in discordSdk.
-- Finally, we can create a new HTML image element with the guild avatar and append it to our application.
+In the following code block, we will:
+1. Call the [`GET /users/@me/guilds`](#DOCS_RESOURCES_USER/get-current-user-guilds) endpoint with `auth.access_token` to get a list of the guilds the authorizing user is in
+2. Iterate over each guild to find the guild we are in based on the `guildId` defined in discordSdk
+3. Create a new HTML image element with the guild avatar and append it to our frontend
 
 > info
-> In this example, we use a pure `fetch` request to call the REST API. However, this is a great place to use your favorite Discord JavaScript library alongside the Embedded App SDK.
+> In this example, we use a pure `fetch` request to make the API call, but you can us one of the JavaScript [community-built libraries](#DOCS_DEVELOPER_TOOLS_COMMUNITY_RESOURCES) if you prefer.
 
-`getting-started-activity/client/main.js`
+<Collapsible title="Fetching information about the current server" icon="code" open>
+
+In the same `client/main.js` file, add the following function:
 
 ```javascript
 async function appendGuildAvatar() {
@@ -635,7 +656,7 @@ async function appendGuildAvatar() {
 }
 ```
 
-Finally, let's call our new function that uses the Discord API.
+Then, call the new function in the callback for `setupDiscordSdk`:
 
 ```javascript
 setupDiscordSdk().then(() => {
@@ -645,8 +666,9 @@ setupDiscordSdk().then(() => {
   appendGuildAvatar();
 });
 ```
+</Collapsible>
 
-If we relaunch our Activity, we will also see our the current server's avatar render in our app.
+If we relaunch our Activity, we will see the current server's avatar render in our Activity.
 
 ![Discord Activities](activities/tutorial-hero.png)
 
