@@ -1,0 +1,223 @@
+# Types of Components
+
+TODO: Reference page
+
+TODO: only 30 overall components in tree
+
+## List of Components
+
+The following is a complete table of available components. Details about each component are in the sections below.
+
+TODO - ideally "category" labels are pills with icons
+
+TODO - should "top-level" be included?
+
+| Type | Name                                                                          | Category                                                                   | Description                                                                         |
+| ---- | ----------------------------------------------------------------------------- | -------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
+| 1    | [Action Row](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/action-row)                 | [Layout](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/layout-components)           | Container to display a row of interactive components                                |
+| 9    | [Section](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/section)                       | [Layout](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/layout-components)           | Container to display text alongside accessory content such as a thumbnail or button |
+| 12   | [Media Gallery](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/media-gallery)           | [Layout](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/layout-components)           | Container to display images and other media types                                   |
+| 14   | [Separator](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/separator)                   | [Layout](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/layout-components)           | Component to add vertical padding between top-level components                      |
+| 17   | [Container](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/embedded-container)          | [Layout](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/layout-components)           | Embedded container that visually groups a set of components                         |
+| 10   | [Text Display](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/text-display)             | [Content](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/content-components)         | Markdown text                                                                       |
+| 11   | [Thumbnail](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/thumbnail)                   | [Content](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/content-components)         | Small image that can be used as an accessory                                        |
+| 13   | [File](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/file)                             | [Content](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/content-components)         | Displays an attached file                                                           |
+| 2    | [Button](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/button)                         | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Button object                                                                       |
+| 3    | [String Select](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/string-select)           | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Select menu for picking from defined text options                                   |
+| 4    | [Text Input](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/text-input)                 | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Text input object                                                                   |
+| 5    | [User Select](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/user-select)               | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Select menu for users                                                               |
+| 6    | [Role Select](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/role-select)               | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Select menu for roles                                                               |
+| 7    | [Mentionable Select](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/mentionable-select) | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Select menu for mentionables (users *and* roles)                                    |
+| 8    | [Channel Select](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/channel-select)         | [Interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS/interactive-components) | Select menu for channels                                                            |
+
+
+## Layout Components
+
+Layout components are used to order, group, and add spacing between [content](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS_CONTENT_COMPONENTS) and [interactive](#DOCS_COMPONENTS_TYPES_OF_COMPONENTS_CONTENT_COMPONENTS) components.
+
+### Action Row
+
+Container that holds up to 5 [interactive components](#TODO) (excluding text input components, which can only be used in modals).
+
+TODO: image of action row
+
+By default, interactive components within an action row will be displayed inline, but may wrap to succeeding lines depending on the width of each component and the user's screen size.
+
+###### Action Row Structure
+
+| Field      | Type                                | Description                                                       |
+| ---------- | ----------------------------------- | ----------------------------------------------------------------- |
+| type       | integer                             | `1` for action row component                                      |
+| components | array of [component objects](#TODO) | Up to 5 interactive [button](#TODO) or [select](#TODO) components |
+| id?        | integer                             | Optional identifier for component                                 |
+
+###### Action Row Example
+
+```json
+{
+  "type": 1,
+  "components": [
+      {
+          "id": 2,
+          "type": 2,
+          "label": "Click me!",
+          "style": 1,
+          "custom_id": "click_one"
+      }
+  ]
+}
+```
+
+### Section
+
+TODO: up to 3 text components, only one accessory
+
+TODO: image of section
+
+### Embedded Container
+
+Container that holds up to 10 components. Embedded containers are visually distinct from surrounding components, and have an optional color bar that you can customize to match your use case.
+
+TODO: limits of what it can contain
+
+TODO: image of embedded container
+
+###### Embedded Container Structure
+
+| Field         | Type                                | Description                                                                      |
+| ------------- | ----------------------------------- | -------------------------------------------------------------------------------- |
+| type          | integer                             | `17` for container component                                                     |
+| components    | array of [component objects](#TODO) | Up to 5 interactive [button](#TODO) or [select](#TODO) components                |
+| accent_color? | ?integer                            | Color for the accent on the embedded container                                   |
+| spoiler?      | boolean                             | Whether the container should be a spoiler (or blurred out). Defaults to `false`. |
+| id?           | integer                             | Optional identifier for component                                                |
+
+###### Embedded Container Example
+
+```json
+{
+  "type": 17,
+  "components": [
+      TODO
+  ]
+}
+```
+
+### Separator
+
+Component that adds vertical padding and visual division between other components.
+
+TODO: image of separator ?
+
+###### Separator Structure
+
+| Field    | Type    | Description                                                                             |
+| -------- | ------- | --------------------------------------------------------------------------------------- |
+| type     | integer | `14` for separator component                                                            |
+| divider? | boolean | Whether a visual divider should be displayed in the component. Defaults to `true`       |
+| spacing? | integer | Size of separator padding—`1` for small padding, `2` for large padding. Defaults to `1` |
+| id?      | integer | Optional identifier for component                                                       |
+
+###### Separator Example
+
+```json
+{
+  "type": 14,
+  "divider": true,
+  "spacing": 2
+}
+```
+
+## Content Components
+
+Content components allow you to display static text, images, and other media.
+
+### Text Display
+
+### Media
+
+### File
+
+TODO
+
+#### Uploading a file
+
+You can upload a file when sending a message and reference it within a file component using the `attachment://<filename>` syntax. Each file component can only display 1 attached file, but you can upload multiple files and add them to different file components within your payload.
+
+> warn
+> Only `.jpg`, `.jpeg`, `.png`, `.webp`, and `.gif` file types are supported at this time.
+
+To upload a file with your message, you'll need to send your payload as `multipart/form-data` (rather than `application/json`) and include your file with a valid filename in your payload. Details and examples for uploading files can be found in the [API Reference](#DOCS_REFERENCE/uploading-files).
+
+### Thumbnail
+
+## Interactive Components
+
+Interactive components allow you to display actionable buttons, select menus, and inputs to users.
+
+Interactive components must be contained in a parent component—all can be contained in an [action row](#TODO) component, and buttons can also be in a [section](#TODO) component's `accessory` field.
+
+### Button
+
+TODO: still porting
+
+Buttons are clickable components that render in messages. They can be clicked by users, and send an [interaction](#DOCS_INTERACTIONS_RECEIVING_AND_RESPONDING/interaction-object) to your app when clicked.
+
+- Buttons must be sent inside an Action Row
+- An Action Row can contain up to 5 buttons
+- An Action Row containing buttons cannot also contain any select menu components
+
+###### Button Structure
+
+| Field      | Type                                                | Description                                                                                                         |
+| ---------- | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- |
+| type       | integer                                             | `2` for a button                                                                                                    |
+| style      | integer                                             | A [button style](#DOCS_INTERACTIONS_MESSAGE_COMPONENTS/button-object-button-styles)                                 |
+| label?     | string                                              | Text that appears on the button; max 80 characters                                                                  |
+| emoji?     | partial [emoji](#DOCS_RESOURCES_EMOJI/emoji-object) | `name`, `id`, and `animated`                                                                                        |
+| custom_id? | string                                              | Developer-defined identifier for the button; max 100 characters                                                     |
+| sku_id?    | snowflake                                           | Identifier for a purchasable [SKU](#DOCS_RESOURCES_SKU/sku-object), only available when using premium-style buttons |
+| url?       | string                                              | URL for link-style buttons                                                                                          |
+| disabled?  | boolean                                             | Whether the button is disabled (defaults to `false`)                                                                |
+| id?        | integer                                             | Optional identifier for component                                                                                   |
+
+Buttons come in a variety of styles to convey different types of actions. These styles also define what fields are valid for a button.
+
+- Non-link and Non-premium buttons **must** have a `custom_id`, and cannot have a `url` or a `sku_id`.
+- Link buttons **must** have a `url`, and cannot have a `custom_id`
+- Link buttons do not send an [interaction](#DOCS_INTERACTIONS_RECEIVING_AND_RESPONDING/interaction-object) to your app when clicked
+- Premium buttons **must** contain a `sku_id`, and cannot have a `custom_id`, `label`, `url`, or `emoji`.
+- Premium buttons do not send an [interaction](#DOCS_INTERACTIONS_RECEIVING_AND_RESPONDING/interaction-object) to your app when clicked
+
+###### Button Styles
+
+Buttons can be in a variety of styles depending on your use case.
+
+| Name      | Value | Color                    | Required Field |
+| --------- | ----- | ------------------------ | -------------- |
+| Primary   | 1     | blurple                  | `custom_id`    |
+| Secondary | 2     | grey                     | `custom_id`    |
+| Success   | 3     | green                    | `custom_id`    |
+| Danger    | 4     | red                      | `custom_id`    |
+| Link      | 5     | grey, navigates to a URL | `url`          |
+| Premium   | 6     | blurple                  | `sku_id`       |
+
+TODO: has to be less intense way of displaying these
+
+![An image showing the different button styles](button-styles.png)
+
+### Select
+
+TODO
+
+#### String Select
+
+#### User Select
+
+#### Role Select
+
+#### Mentionable Select
+
+#### Channel Select
+
+### Text Input
